@@ -50,7 +50,7 @@ footer-links:
   pinterest:
   rss: atom.xml # just type anything here for a working RSS icon
   stackoverflow: # your stackoverflow profile, e.g. "users/50476/bart-kiers"
-  tumblr: # https://<username>.tumblr.com
+  tumblr: #
   twitter: 2049bbs
   youtube: # channel/<your_long_string> or user/<user-name>
 
