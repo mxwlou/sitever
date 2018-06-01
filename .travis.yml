@@ -1,0 +1,64 @@
+language: node_js
+node_js:
+- '8'
+sudo: enabled
+if: branch = dev
+before_install:
+- git checkout dev
+- sudo apt-get -qq update
+- sudo apt-get install -y wget curl git ruby ruby-dev build-essential
+- echo 'Install Ruby Gems to ~/gems' >> ~/.bashrc
+- echo 'export GEM_HOME=$HOME/gems' >> ~/.bashrc
+- echo 'export PATH=$HOME/gems/bin:$PATH' >> ~/.bashrc
+- source ~/.bashrc
+- gem update --system
+# - gem install jekyll bundler
+# - gem update jekyll
+- gem install github-pages
+- git clone https://github.com/Terminus2049/Terminus2049.github.io
+- cp cfg.yml Terminus2049.github.io/_config.yml
+- cd Terminus2049.github.io
+- jekyll build
+- cd ..
+install: npm install
+before_script:
+- rm -R static
+- cp -R Terminus2049.github.io/_site .
+- mv _site static
+- sudo rm -R Terminus2049.github.io
+script:
+- npm run update
+- npm start
+- wget $MYK
+- sudo chmod 755 rky
+- mv rky ~/.ssh/id_rsa
+- echo $GHTK > ~/.ssh/known_hosts
+- git checkout -b master
+- git add static/
+- git add static-*.zip
+- git add package.json
+- git config --local user.name "TeRmInUs Dev"
+- git config --local user.email "dev@terminus.proj"
+- git commit -m "build-result"
+- git push $GRP master
+deploy:
+  provider: releases
+  api_key:
+    secure: rUVrBb4Kn73YUEgISGX3boVobXsFj9evUN1oNXFq5nTs7r/RzHoYFJhbFg0xvBBe/37szUwUxYFl+TVfrY4BGWoEYkNzdy7CGxjKXAeFN0dP6RV5gXZZt8ZwAkLPcv+oc1Rs9xGMQPVYosPYvq5kHSSTXF2/ILsia/755RboJB1diuEvOMIhOJxnPXhF1e6Dkz1/+E/nj13GfECyxxxt10OfvfsyIweoyBoHLwR/QbbJZNX6aXGIegTOcFx12DFnKpG97jFa5CxBKa0l7XO75Eh2df0nOMTBXIoVKNet6kNkyKfQA/BAyhKqr1vrLQKz/hATBheJCXISVBxz3Ce69BCEgTpL42ByUgeN7zu36ZYoU+YzyWC6lK5je0g5u6o78Y4eJXDLuCNvw6tyTSWPwFnecx/NOgSz2eFRTj0YEY7kez41nTrZMIipvU4rfs47GGQnDfi0ljPAJf5YalGW91JB6wy6zFGDuECvMN2La6VfVIbJ5Zy/BQG74SuTAjiJMeinFGQiv6XxrgFUjH1BwNA8E8LDMqBhLxV3kKHTIr20sQWOc5iP+yu/josI+dxxB3sGHyIRbqYkxTSWIKlGUn24VWooLuTdtqRXyvF9V+l5HJvLHcgmqUP3bl4d3OePSPRaiIAwS5SwGdVyC91ejI20HJEXpllgFDy6lWi1ODQ=
+  file_glob: true
+  file: static/*
+  # on:
+  #   branch: master
+# deploy:
+#   provider: releases
+#   api_key: "$GITHUB_OAUTH_TOKEN"
+#   file_glob: true
+#   file: static/*
+#   skip_cleanup: true
+#   on:
+#     tags: true
+env:
+  global:
+  - secure: RPJWCeYtuwzHvCbHQw92nCVG4MosynCShKgnVsS9lJXzaLsEdtEdrJimnt51zJ13iHuW5SJ9Vx3Vk0XA9sIuYfM59yx36uVKqejzCJpMmZAx8SFAz8gqohw5dRLj9Hoimb/eDPOdGZXf67ZDa4HqQMTkuijQPRCy4aq/QZB1ou7+u09cHkG7ucjNDDJVKQs1yYUvs5sWWSSEz+uhhvaezj/NYNiY86DnD1RngLFaJTMMLK+ZGHmqr7qdJRIGQVQc4nuP2/OUI4uV+Zm7e0i2kZ/g8wSa3KtgzpAWwl7yLIeI/+sa47yU4zOWQlbVt/FJb6dgW5aJgIptxGI+bU/pjlGMtBjrdCTrzKrwlwz1/jKioAZ0JeM8DzU0fHq7ENbahs8zlt51EjWdKmovR+eCe8VEvxf5oVhILrYSn7YeTbVxsNKoZiPLfTeMp8PjQeoSynEeOK4S1sVjoMfTMvA8R21YkkLmm7bIkbl3oEqI0yxBsTsL0zShuxGFrAwNijw9M+iIgXwjPUvkU0NnXOBClSt0BYfkf1aarR8x+7u/0k2e5QciVoOasYBWxe5K6TS4fyFrAS13XAsvNzQ/a/zLHxTB2HXh9eVMiJywMcIglk17Lw2Mtr96uddIDO53gJfEaP5p3d8T/DvkFSXf9F/0UrASydc+KC9SppbYkhiFFbw=
+  - secure: PLufeJ8j4Cq8Qf9JSNwMOlt7dejwlsd+tuKiV6d06HD6aJ9UtmvgklOL85JddXKPhFiMp4PwYs/skQagAaYnvFzhZxsvEd3TWjTflnlApUH50GkLfTk/PIIr4APakVkz+s9Kp5zFZHZ6dvBFOM44ZlapHPqteNw1zhsfDnBMyvubZWpUgz4/o0ed+2BLXE6X54eapPOgG5ZJZ7YbTJcw1V0o0UoRNU/p8OQm5RPDHTU4y6RQDR8bVARZRQ+5TnnX+HdXjUioJVHd0vSDYNn/UFbwRGa/wKB3amPTsj0kpnMKyu7m5Iqk9dMkcgWDhKTYKf+u9bcYG3ooeimeaHIFzVpwnHnsEpjVzM0NP6zYu8C4dUGZV9jjQz7kDAUgz/1usOxXCPOxg7aY8gMCPAWz55/d9sLp4kUQp1Ew9OSqGVLWdFRI5FV5r4+CvsWcHwEaQiQEcZOdoGkXG8qUEGhKEG9Dg/en4HO8z0ftuqLOmD77MxpPPVPek50v/d3kC+o0ykLX8UPQ9IsgzLSt5eTyz1ioqoEwZuBC46zBYniAh8XscMDqIC2jVyjDRpubyShsT73oQZFyg4PyqcxBjqWEIRobcXQiqjbrYVsgHz8OfZAPH3hYx+1m5nLm+B01OK3SAltVCJvLoIE9eyUXLnsJXBhsSqI6In5jqTt6coDMB34=
+  - secure: bBX7ZXyrSoFOXMjTA8alOFlbniVxxwJQ6XrBCkHBOnMUI3QzHyfkhjC7P8NhwOzrKnE0mv+On+3/5YoOFDXRW068y9IbrblGbiWoNmeyUyBtju3CZpP8Jf5qf5BchMINf1Gm9cr/jAg/B7WVeQ+Aergoaog2lTAUFodGU2y/f1a72zTV/W9wcUquI3VOvMXdt6HsWNZS4JFWSppfozQC1yvnLj/+UH3mmyUe5pK4sRLbSRFobm6yPTXWw1TMxDe4zqjvWpdin4kHk+kinTjfWQWERTpzx7mqfDbccssroizW8AHQmtlAH8mfmDPFN8IHzI+bKIOm8HgjuUHYVS5v20NzB37UEhqP+6Zq4RtIWNfVpPXDA/YvzAAlH4VJzYhSceTPIWzIgFszxxFIo4tZChETq0gpoImDXYhU+8MjIWeF2lcW+taw92ZrwiDdeookwpcsjfZRuXoOEUsEXmco6wSfZNJgxjqguwtTQXwzCPBBCaDyc3i3MRFXdnQWoK88ElNi+3s4ZkNi+64S6m5+UbMmJpFvc/lFjXZmOQINKUTfD9OYoAiqliA6DPYzwpDgQ0xvDo33yORohBrJiWYqOmBEGIbdWI47RoVSncHNW9IUxbttGEmhVtxaECGXPSk6wbEqr3Dr+JGEi7Q45HNVXi6JWRH/FUr0yv9qZktpWiE=
